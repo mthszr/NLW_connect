@@ -28,8 +28,18 @@ export function SubscriptionForm() {
     resolver: zodResolver(subscriptionSchema),
   })
 
+  async function onSubscribe({ name, email}: SubscriptionSchema) {
+    const referrer = searchParams.get('referrer')
+
+    const { subscriberId } = await subscribeToEvent({ name, email, referrer })
+
+    router.push(`/invite/${subscriberId}`)
+  }
+
   return (
-    <form className="bg-gray-700 border border-gray-600 rounded-2xl p-8 space-y-6 w-full md:max-w-[440px]">
+    <form 
+      onSubmit={handleSubmit(onSubscribe)}
+      className="bg-gray-700 border border-gray-600 rounded-2xl p-8 space-y-6 w-full md:max-w-[440px]">
       <h2 className="font-heading font-semibold text-gray-200 text-xl">
         Inscrição
       </h2>
